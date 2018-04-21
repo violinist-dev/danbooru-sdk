@@ -4,21 +4,24 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d5aec6572883f2744c061c0352cfc5d6",
+    "content-hash": "e9b2fd2a8da8af860d606866a819670c",
     "packages": [
         {
             "name": "desu-project/chanbooru-interface",
-            "version": "v0.0.0",
+            "version": "v0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/desu-project/chanbooru-interface.git",
-                "reference": "99f4a0e57ccd7732a0c466d8aedf5b532b3ac707"
+                "reference": "887d9f097f855ac92ec17e2fe2be125f2ae2a654"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/desu-project/chanbooru-interface/zipball/99f4a0e57ccd7732a0c466d8aedf5b532b3ac707",
-                "reference": "99f4a0e57ccd7732a0c466d8aedf5b532b3ac707",
+                "url": "https://api.github.com/repos/desu-project/chanbooru-interface/zipball/887d9f097f855ac92ec17e2fe2be125f2ae2a654",
+                "reference": "887d9f097f855ac92ec17e2fe2be125f2ae2a654",
                 "shasum": ""
+            },
+            "require": {
+                "php": "^7.2"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^2.11"
@@ -30,14 +33,23 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
             "authors": [
                 {
-                    "name": "Petr Luzhin",
+                    "name": "Petr Flaks",
                     "email": "lithx@yandex.com"
                 }
             ],
             "description": "A PHP interfaces used to create PHP SDKs for imageboards like Danbooru, Konachan and others.",
-            "time": "2018-03-25T15:17:48+00:00"
+            "homepage": "https://github.com/desu-project/chanbooru-interface",
+            "keywords": [
+                "imageboard",
+                "interface",
+                "standard"
+            ],
+            "time": "2018-04-21T20:36:41+00:00"
         }
     ],
     "packages-dev": [
