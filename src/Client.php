@@ -85,14 +85,14 @@ class Client implements ClientInterface
         curl_setopt($curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $this->convertArrayToCurlHeaders($headers));
 
+        $response = curl_exec($curl);
+
         if (mb_strlen($curlError = curl_error($curl)) > 0) {
             throw new RuntimeException(sprintf(
                 'cURL request error: %s',
                 $curlError
             ));
         }
-
-        $response = curl_exec($curl);
 
         curl_close($curl);
 
