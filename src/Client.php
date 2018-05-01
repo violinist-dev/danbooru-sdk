@@ -26,17 +26,29 @@ class Client implements ClientInterface
     private $isSafe;
 
     /**
+     * Function which accepts cURL resource as first argument.
+     * May be used to globally configure cURL requests (e.g. for setting proxy).
+     * Some cURL parameters can not be reconfigured.
+     *
+     * @var callable|null
+     */
+    private $curlConfigurator;
+
+    /**
      * Client constructor.
      *
      * @param null|string $apiKey
      * @param bool        $isSafe @see self::$isSafe
+     * @param callable $curlConfigurator @see self::$curlConfigurator
      */
     public function __construct(
         ?string $apiKey = null,
-        bool $isSafe = false
+        bool $isSafe = false,
+        ?callable $curlConfigurator = null
     ) {
         $this->apiKey = $apiKey;
         $this->isSafe = $isSafe;
+        $this->curlConfigurator = $curlConfigurator;
     }
 
     /**
@@ -78,6 +90,10 @@ class Client implements ClientInterface
             : self::BASE_HOST;
 
         $requestPath = $host . $endpoint . '?' . http_build_query($queryString);
+
+        if (!is_null($this->curlConfigurator)) {
+            ($this->curlConfigurator)($curl);
+        }
 
         curl_setopt($curl, CURLOPT_URL, $requestPath);
         curl_setopt($curl, CURLOPT_HTTPGET, true);
