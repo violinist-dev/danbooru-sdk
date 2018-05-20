@@ -271,9 +271,16 @@ class Post implements PostInterface
      *
      * @return Tag[]
      */
-    public function getTags(): array
+    public function getTags(int $type = null): array
     {
-        return $this->tags;
+        if ($type === null) {
+            return $this->tags;
+        } else {
+            return array_filter($this->tags, function (Tag $tag) use ($type): bool {
+                return $tag->getType() === $type;
+            });
+        }
+
     }
 
     /**
