@@ -105,10 +105,6 @@ class Post implements PostInterface
             throw new InvalidArgumentException('Rating is invalid');
         }
 
-        if (!self::isValidScore($score)) {
-            throw new InvalidArgumentException('Score is invalid');
-        }
-
         if (!self::isValidStatus($status)) {
             throw new InvalidArgumentException('Status is invalid');
         }
@@ -388,11 +384,6 @@ class Post implements PostInterface
             self::RATING_QUESTIONABLE,
             self::RATING_EXPLICIT,
         ]);
-    }
-
-    protected static function isValidScore(int $score): bool
-    {
-        return $score >= 0;
     }
 
     protected static function isValidStatus(int $status): bool
