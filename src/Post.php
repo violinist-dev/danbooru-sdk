@@ -53,6 +53,11 @@ class Post implements PostInterface
     private $sourceFile;
 
     /**
+     * @var null|string
+     */
+    private $source;
+
+    /**
      * @var Tag[]
      */
     private $tags;
@@ -68,6 +73,7 @@ class Post implements PostInterface
      * @param int      $status
      * @param string   $previewImageUrl
      * @param File     $sourceFile
+     * @param string|null $source
      * @param Tag[]    $tags
      *
      * @throws InvalidArgumentException if invalid argument passed
@@ -81,6 +87,7 @@ class Post implements PostInterface
         int $status,
         string $previewImageUrl,
         File $sourceFile,
+        ?string $source,
         array $tags
     ) {
         $this->id = $id;
@@ -91,6 +98,7 @@ class Post implements PostInterface
         $this->status = $status;
         $this->previewImageUrl = $previewImageUrl;
         $this->sourceFile = $sourceFile;
+        $this->source = $source;
         $this->tags = $tags;
 
         if (!self::isValidId($id)) {
@@ -111,6 +119,10 @@ class Post implements PostInterface
 
         if (!self::isValidPreviewImageUrl($previewImageUrl)) {
             throw new InvalidArgumentException('Preview image URL is invalid');
+        }
+
+        if (!self::isValidSource($source)) {
+            throw new InvalidArgumentException('Source is invalid');
         }
 
         foreach ($tags as $tag) {
@@ -280,7 +292,16 @@ class Post implements PostInterface
                 return $tag->getType() === $type;
             });
         }
+    }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @return null|string
+     */
+    public function getSource(): ?string
+    {
+        return $this->source;
     }
 
     /**
@@ -307,6 +328,7 @@ class Post implements PostInterface
             self::getStatusByBooleanFlags($post['is_pending'], $post['is_deleted'], $post['is_banned']),
             $post['preview_file_url'],
             $originalFile,
+            $post['source'],
             $tags
         );
     }
@@ -406,6 +428,19 @@ class Post implements PostInterface
     {
         return filter_var(
             $previewFileUrl,
+            FILTER_VALIDATE_URL,
+            FILTER_FLAG_SCHEME_REQUIRED | FILTER_FLAG_HOST_REQUIRED | FILTER_FLAG_PATH_REQUIRED
+        );
+    }
+
+    protected static function isValidSource(?string $source): bool
+    {
+        if (is_null($source)) {
+            return true;
+        }
+
+        return filter_var(
+            $source,
             FILTER_VALIDATE_URL,
             FILTER_FLAG_SCHEME_REQUIRED | FILTER_FLAG_HOST_REQUIRED | FILTER_FLAG_PATH_REQUIRED
         );

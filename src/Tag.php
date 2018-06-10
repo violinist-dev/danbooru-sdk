@@ -14,11 +14,11 @@ class Tag implements TagInterface
     const ORDER_DATE = 'date';
     const ORDER_COUNT = 'count';
 
-    const TYPE_GENERAL = 0;
-    const TYPE_ARTIST = 1;
-    const TYPE_CHARACTER = 4;
-    const TYPE_TITLE = 3;
-    const TYPE_META = 5;
+    const DANBOORU_TYPE_GENERAL = 0;
+    const DANBOORU_TYPE_ARTIST = 1;
+    const DANBOORU_TYPE_CHARACTER = 4;
+    const DANBOORU_TYPE_TITLE = 3;
+    const DANBOORU_TYPE_META = 5;
 
     /**
      * @var string
@@ -40,25 +40,21 @@ class Tag implements TagInterface
      *
      * @param string $title
      * @param int    $amountOfPosts
-     * @param int    $type
+     * @param int    $danbooruType
      *
      * @throws InvalidArgumentException if invalid argument passed
      */
     public function __construct(
         string $title,
         int $amountOfPosts,
-        int $type
+        int $danbooruType
     ) {
         $this->title = $title;
         $this->amountOfPosts = $amountOfPosts;
-        $this->type = $type;
+        $this->type = self::convertDanbooruTypeToChanbooruType($danbooruType);
 
         if (!self::isValidAmountOfPosts($amountOfPosts)) {
             throw new InvalidArgumentException('Amount of posts is invalid');
-        }
-
-        if (!self::isValidType($type)) {
-            throw new InvalidArgumentException('Type is invalid');
         }
     }
 
@@ -78,7 +74,7 @@ class Tag implements TagInterface
         Client $client,
         $names,
         string $orderBy = self::ORDER_NAME,
-        ?int $type = null,
+//        ?int $type = null,
         bool $hideEmpty = true
     ): array {
         if (!is_null($names) && !is_string($names) && !is_array($names)) {
@@ -89,9 +85,9 @@ class Tag implements TagInterface
             throw new InvalidArgumentException('Invalid order method');
         }
 
-        if (!is_null($type) && !self::isValidType($type)) {
-            throw new InvalidArgumentException('Invalid tag type');
-        }
+//        if (!is_null($type) && !self::isValidType($type)) {
+//            throw new InvalidArgumentException('Invalid tag type');
+//        }
 
         $query = [
             'search' => [
@@ -110,9 +106,9 @@ class Tag implements TagInterface
             }
         }
 
-        if (!is_null($type)) {
-            $query['search']['category'] = $type;
-        }
+//        if (!is_null($type)) {
+//            $query['search']['category'] = $type;
+//        }
 
         $tagsAsArrays = $client->sendRequest(
             self::ENDPOINT,
@@ -176,7 +172,7 @@ class Tag implements TagInterface
             $client,
             [$name],
             self::ORDER_NAME,
-            null,
+//            null,
             false
         );
 
@@ -237,17 +233,6 @@ class Tag implements TagInterface
         return $amountOfPosts >= 0;
     }
 
-    protected static function isValidType(int $type): bool
-    {
-        return in_array($type, [
-            self::TYPE_GENERAL,
-            self::TYPE_ARTIST,
-            self::TYPE_CHARACTER,
-            self::TYPE_TITLE,
-            self::TYPE_META,
-        ]);
-    }
-
     protected static function isValidOrderingMethod(string $orderBy): bool
     {
         return in_array($orderBy, [
@@ -255,5 +240,21 @@ class Tag implements TagInterface
             self::ORDER_DATE,
             self::ORDER_COUNT,
         ]);
+    }
+
+    protected static function convertDanbooruTypeToChanbooruType(int $type): ?int
+    {
+        $types = [
+            self::DANBOORU_TYPE_TITLE => self::TYPE_TITLE,
+            self::DANBOORU_TYPE_CHARACTER => self::TYPE_CHARACTER,
+            self::DANBOORU_TYPE_ARTIST => self::TYPE_ARTIST,
+            self::DANBOORU_TYPE_META => self::TYPE_META,
+        ];
+
+        if (!isset($types[$type])) {
+            return null;
+        }
+
+        return $types[$type];
     }
 }

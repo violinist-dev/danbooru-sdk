@@ -1,23 +1,23 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e9b2fd2a8da8af860d606866a819670c",
+    "content-hash": "09bec9b1491417eec73217fe8342ac00",
     "packages": [
         {
             "name": "desu-project/chanbooru-interface",
-            "version": "v0.3.0",
+            "version": "v0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/desu-project/chanbooru-interface.git",
-                "reference": "887d9f097f855ac92ec17e2fe2be125f2ae2a654"
+                "reference": "77751554e0d11e721e3dfb90349ff07ce9e90f85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/desu-project/chanbooru-interface/zipball/887d9f097f855ac92ec17e2fe2be125f2ae2a654",
-                "reference": "887d9f097f855ac92ec17e2fe2be125f2ae2a654",
+                "url": "https://api.github.com/repos/desu-project/chanbooru-interface/zipball/77751554e0d11e721e3dfb90349ff07ce9e90f85",
+                "reference": "77751554e0d11e721e3dfb90349ff07ce9e90f85",
                 "shasum": ""
             },
             "require": {
@@ -49,7 +49,7 @@
                 "interface",
                 "standard"
             ],
-            "time": "2018-04-21T20:36:41+00:00"
+            "time": "2018-06-10T15:18:25+00:00"
         }
     ],
     "packages-dev": [
