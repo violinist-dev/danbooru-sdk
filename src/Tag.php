@@ -31,7 +31,7 @@ class Tag implements TagInterface
     private $amountOfPosts;
 
     /**
-     * @var int
+     * @var null|int
      */
     private $type;
 
@@ -209,9 +209,9 @@ class Tag implements TagInterface
     /**
      * {@inheritdoc}
      *
-     * @return int
+     * @return null|int
      */
-    public function getType(): int
+    public function getType(): ?int
     {
         return $this->type;
     }
@@ -245,6 +245,7 @@ class Tag implements TagInterface
     protected static function convertDanbooruTypeToChanbooruType(int $type): ?int
     {
         $types = [
+            self::DANBOORU_TYPE_GENERAL => self::TYPE_GENERAL,
             self::DANBOORU_TYPE_TITLE => self::TYPE_TITLE,
             self::DANBOORU_TYPE_CHARACTER => self::TYPE_CHARACTER,
             self::DANBOORU_TYPE_ARTIST => self::TYPE_ARTIST,
