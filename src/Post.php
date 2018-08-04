@@ -335,11 +335,11 @@ class Post implements PostInterface
         return new Post(
             $post['id'],
             DateTime::createFromFormat('Y-m-d\TH:i:s.uP', $post['created_at']),
-            $post['md5'],
+            $post['md5'] ?? null,
             self::getRatingByStringIdentifier($post['rating']),
             $post['score'],
             self::getStatusByBooleanFlags($post['is_pending'], $post['is_deleted'], $post['is_banned']),
-            $post['preview_file_url'],
+            $post['preview_file_url'] ?? null,
             $originalFile,
             $post['source'],
             $tags
