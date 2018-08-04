@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1ac229a274819bcbf24ce1729f057308",
+    "content-hash": "7693ce91215c111791ca096e3f9a5a2c",
     "packages": [
         {
             "name": "desu-project/chanbooru-interface",
-            "version": "v0.6.0",
+            "version": "v0.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/desu-project/chanbooru-interface.git",
-                "reference": "86a3a0204d2e57c230a3f6e4430944bb4084e358"
+                "reference": "32bbc9ec3418e296b93bc8ac40bd75b8745c4983"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/desu-project/chanbooru-interface/zipball/86a3a0204d2e57c230a3f6e4430944bb4084e358",
-                "reference": "86a3a0204d2e57c230a3f6e4430944bb4084e358",
+                "url": "https://api.github.com/repos/desu-project/chanbooru-interface/zipball/32bbc9ec3418e296b93bc8ac40bd75b8745c4983",
+                "reference": "32bbc9ec3418e296b93bc8ac40bd75b8745c4983",
                 "shasum": ""
             },
             "require": {
@@ -49,7 +49,7 @@
                 "interface",
                 "standard"
             ],
-            "time": "2018-08-04T20:41:35+00:00"
+            "time": "2018-08-04T21:01:37+00:00"
         }
     ],
     "packages-dev": [

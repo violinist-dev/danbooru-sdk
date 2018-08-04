@@ -23,7 +23,7 @@ class Post implements PostInterface
     private $creationDate;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $hash;
 
@@ -67,7 +67,7 @@ class Post implements PostInterface
      *
      * @param int         $id
      * @param DateTime    $creationDate
-     * @param string      $hash
+     * @param null|string $hash
      * @param int         $rating
      * @param int         $score
      * @param int         $status
@@ -81,7 +81,7 @@ class Post implements PostInterface
     public function __construct(
         int $id,
         DateTime $creationDate,
-        string $hash,
+        ?string $hash,
         int $rating,
         int $score,
         int $status,
@@ -221,9 +221,9 @@ class Post implements PostInterface
     /**
      * {@inheritdoc}
      *
-     * @return string
+     * @return null|string
      */
-    public function getHash(): string
+    public function getHash(): ?string
     {
         return $this->hash;
     }
@@ -414,8 +414,12 @@ class Post implements PostInterface
         return $id > 0;
     }
 
-    protected static function isValidHash(string $hash): bool
+    protected static function isValidHash(?string $hash): bool
     {
+        if (is_null($hash)) {
+            return true;
+        }
+
         return preg_match('/^[a-f0-9]{32}$/', $hash) === 1;
     }
 

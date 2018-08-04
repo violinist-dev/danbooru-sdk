@@ -24,7 +24,7 @@
   ],
   "require": {
     "php" : "^7.2",
-    "desu-project/chanbooru-interface": "^0.6.0"
+    "desu-project/chanbooru-interface": "^0.6.1"
   },
   "autoload": {
     "psr-4": {
