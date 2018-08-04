@@ -341,7 +341,7 @@ class Post implements PostInterface
             self::getStatusByBooleanFlags($post['is_pending'], $post['is_deleted'], $post['is_banned']),
             $post['preview_file_url'] ?? null,
             $originalFile,
-            $post['source'],
+            $post['source'] !== '' ? $post['source'] : null,
             $tags
         );
     }
