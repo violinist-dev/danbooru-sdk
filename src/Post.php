@@ -43,12 +43,12 @@ class Post implements PostInterface
     private $status;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $previewImageUrl;
 
     /**
-     * @var File
+     * @var null|File
      */
     private $sourceFile;
 
@@ -65,16 +65,16 @@ class Post implements PostInterface
     /**
      * Post constructor.
      *
-     * @param int      $id
-     * @param DateTime $creationDate
-     * @param string   $hash
-     * @param int      $rating
-     * @param int      $score
-     * @param int      $status
-     * @param string   $previewImageUrl
-     * @param File     $sourceFile
+     * @param int         $id
+     * @param DateTime    $creationDate
+     * @param string      $hash
+     * @param int         $rating
+     * @param int         $score
+     * @param int         $status
+     * @param null|string $previewImageUrl
+     * @param null|File   $sourceFile
      * @param string|null $source
-     * @param Tag[]    $tags
+     * @param Tag[]       $tags
      *
      * @throws InvalidArgumentException if invalid argument passed
      */
@@ -85,8 +85,8 @@ class Post implements PostInterface
         int $rating,
         int $score,
         int $status,
-        string $previewImageUrl,
-        File $sourceFile,
+        ?string $previewImageUrl,
+        ?File $sourceFile,
         ?string $source,
         array $tags
     ) {
@@ -261,9 +261,9 @@ class Post implements PostInterface
     /**
      * {@inheritdoc}
      *
-     * @return File
+     * @return null|File
      */
-    public function getSourceFile(): FileInterface
+    public function getSourceFile(): ?FileInterface
     {
         return $this->sourceFile;
     }
@@ -271,9 +271,9 @@ class Post implements PostInterface
     /**
      * {@inheritdoc}
      *
-     * @return string
+     * @return null|string
      */
-    public function getPreviewImageUrl(): string
+    public function getPreviewImageUrl(): ?string
     {
         return $this->previewImageUrl;
     }
@@ -305,6 +305,16 @@ class Post implements PostInterface
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * @return bool
+     */
+    public function isPostCensored(): bool
+    {
+        return isset($post['file_ext']);
+    }
+
+    /**
      * Creates Post instance from API response.
      *
      * @param Client $client
@@ -316,7 +326,10 @@ class Post implements PostInterface
         Client $client,
         array $post
     ): Post {
-        $originalFile = File::fromArray($post);
+        $originalFile = isset($post['file_ext'])
+            ? File::fromArray($post)
+            : null;
+
         $tags = Tag::byNames($client, explode(' ', $post['tag_string']));
 
         return new Post(
@@ -424,8 +437,12 @@ class Post implements PostInterface
         ]);
     }
 
-    protected static function isValidPreviewImageUrl(string $previewFileUrl): bool
+    protected static function isValidPreviewImageUrl(?string $previewFileUrl): bool
     {
+        if (is_null($previewFileUrl)) {
+            return true;
+        }
+
         return filter_var(
             $previewFileUrl,
             FILTER_VALIDATE_URL,

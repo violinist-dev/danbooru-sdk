@@ -38,8 +38,8 @@ class Client implements ClientInterface
      * Client constructor.
      *
      * @param null|string $apiKey
-     * @param bool        $isSafe @see self::$isSafe
-     * @param callable $curlConfigurator @see self::$curlConfigurator
+     * @param bool        $isSafe           @see self::$isSafe
+     * @param callable    $curlConfigurator @see self::$curlConfigurator
      */
     public function __construct(
         ?string $apiKey = null,
