@@ -140,7 +140,7 @@ class Post implements PostInterface
      * @param int    $page
      * @param int    $limit
      *
-     * @return array
+     * @return Post[]
      */
     public static function search(
         Client $client,
