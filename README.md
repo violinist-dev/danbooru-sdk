@@ -1,6 +1,9 @@
 # Danbooru PHP SDK
 
-[![Build status](https://api.travis-ci.org/desu-project/chanbooru-interface.svg)](https://travis-ci.org/desu-project/danbooru-sdk)
+
+[![Build status](https://api.travis-ci.org/desu-project/danbooru-sdk.svg)](https://travis-ci.org/desu-project/danbooru-sdk)
+[![Latest Stable Version](https://poser.pugx.org/desu-project/danbooru-sdk/version)](https://packagist.org/packages/desu-project/danbooru-sdk)
+[![Monthly Downloads](https://poser.pugx.org/desu-project/danbooru-sdk/d/monthly)](https://packagist.org/packages/desu-project/danbooru-sdk)
 
 It's collection of entities, value objects and simple client to work with [Danbooru API](https://danbooru.donmai.us/wiki_pages/43568) in read-only mode. This SDK implements [desu-project/chanbooru-interface](https://github.com/desu-project/chanbooru-interface).
 
