@@ -63,7 +63,6 @@ class Tag implements TagInterface
      * @param array|null|string $names     If it's string, it will search by pattern.
      *                                     If it's array, it will search strictly by tag names.
      * @param string            $orderBy
-     * @param int|null          $type
      * @param bool              $hideEmpty
      *
      * @return array
@@ -74,7 +73,7 @@ class Tag implements TagInterface
         Client $client,
         $names,
         string $orderBy = self::ORDER_NAME,
-//        ?int $type = null,
+        //        ?int $type = null,
         bool $hideEmpty = true
     ): array {
         if (!is_null($names) && !is_string($names) && !is_array($names)) {
@@ -172,7 +171,7 @@ class Tag implements TagInterface
             $client,
             [$name],
             self::ORDER_NAME,
-//            null,
+            //            null,
             false
         );
 

@@ -311,7 +311,7 @@ class Post implements PostInterface
      */
     public function isPostCensored(): bool
     {
-        return isset($post['file_ext']);
+        return is_null($this->getHash());
     }
 
     /**
