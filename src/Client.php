@@ -85,7 +85,7 @@ class Client implements ClientInterface
         ];
 
         if (!is_null($this->getApiKey())) {
-            $headers['Authorization'] = $this->getApiKey();
+            $headers['Authorization'] = base64_encode($this->getApiKey());
         }
 
         $curl = curl_init();
