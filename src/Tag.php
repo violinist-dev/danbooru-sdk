@@ -59,13 +59,13 @@ class Tag implements TagInterface
     }
 
     /**
-     * @param Client            $client
-     * @param array|null|string $names     If it's string, it will search by pattern.
+     * @param Client               $client
+     * @param string[]|null|string $names  If it's string, it will search by pattern.
      *                                     If it's array, it will search strictly by tag names.
      * @param string            $orderBy
      * @param bool              $hideEmpty
      *
-     * @return array
+     * @return Tag[]
      *
      * @throws InvalidArgumentException if invalid $names argument passed
      */
@@ -122,11 +122,11 @@ class Tag implements TagInterface
     /**
      * Search tags by names.
      *
-     * @param Client $client
-     * @param array  $names
-     * @param string $orderBy
+     * @param Client   $client
+     * @param string[] $names
+     * @param string   $orderBy
      *
-     * @return array
+     * @return Tag[]
      */
     public static function byNames(
         Client $client,
@@ -143,7 +143,7 @@ class Tag implements TagInterface
      * @param string $namePattern @example: girl*
      * @param string $orderBy
      *
-     * @return array
+     * @return Tag[]
      */
     public static function byNamePattern(
         Client $client,

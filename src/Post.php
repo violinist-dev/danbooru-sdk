@@ -135,10 +135,10 @@ class Post implements PostInterface
     /**
      * Search posts.
      *
-     * @param Client $client
-     * @param array  $tags
-     * @param int    $page
-     * @param int    $limit
+     * @param Client   $client
+     * @param string[] $tags
+     * @param int      $page
+     * @param int      $limit
      *
      * @return Post[]
      */
