@@ -117,16 +117,16 @@
         },
         {
             "name": "composer/xdebug-handler",
-            "version": "1.1.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/xdebug-handler.git",
-                "reference": "c919dc6c62e221fc6406f861ea13433c0aa24f08"
+                "reference": "e37cbd80da64afe314c72de8d2d2fec0e40d9373"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/c919dc6c62e221fc6406f861ea13433c0aa24f08",
-                "reference": "c919dc6c62e221fc6406f861ea13433c0aa24f08",
+                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/e37cbd80da64afe314c72de8d2d2fec0e40d9373",
+                "reference": "e37cbd80da64afe314c72de8d2d2fec0e40d9373",
                 "shasum": ""
             },
             "require": {
@@ -157,7 +157,7 @@
                 "Xdebug",
                 "performance"
             ],
-            "time": "2018-04-11T15:42:36+00:00"
+            "time": "2018-08-23T12:00:19+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -693,16 +693,16 @@
         },
         {
             "name": "nette/php-generator",
-            "version": "v3.0.4",
+            "version": "v3.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/php-generator.git",
-                "reference": "b381ecacbf5a0b5f99cc0b303d5b0578d409f446"
+                "reference": "ea90209c2e8a7cd087b2742ca553c047a8df5eff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/php-generator/zipball/b381ecacbf5a0b5f99cc0b303d5b0578d409f446",
-                "reference": "b381ecacbf5a0b5f99cc0b303d5b0578d409f446",
+                "url": "https://api.github.com/repos/nette/php-generator/zipball/ea90209c2e8a7cd087b2742ca553c047a8df5eff",
+                "reference": "ea90209c2e8a7cd087b2742ca553c047a8df5eff",
                 "shasum": ""
             },
             "require": {
@@ -751,7 +751,7 @@
                 "php",
                 "scaffolding"
             ],
-            "time": "2018-04-26T16:48:20+00:00"
+            "time": "2018-08-09T14:32:27+00:00"
         },
         {
             "name": "nette/robot-loader",
@@ -1148,16 +1148,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.10.2",
+            "version": "0.10.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "d69658794514e57ad9f247e623513397038f362f"
+                "reference": "dc62f78c9aa6e9f7c44e8d6518f1123cd1e1b1c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/d69658794514e57ad9f247e623513397038f362f",
-                "reference": "d69658794514e57ad9f247e623513397038f362f",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/dc62f78c9aa6e9f7c44e8d6518f1123cd1e1b1c0",
+                "reference": "dc62f78c9aa6e9f7c44e8d6518f1123cd1e1b1c0",
                 "shasum": ""
             },
             "require": {
@@ -1213,7 +1213,7 @@
                 "MIT"
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
-            "time": "2018-07-22T17:55:11+00:00"
+            "time": "2018-08-12T15:14:21+00:00"
         },
         {
             "name": "psr/log",
@@ -1693,16 +1693,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.8.0",
+            "version": "v1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "3296adf6a6454a050679cde90f95350ad604b171"
+                "reference": "d0cd638f4634c16d8df4508e847f14e9e43168b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/3296adf6a6454a050679cde90f95350ad604b171",
-                "reference": "3296adf6a6454a050679cde90f95350ad604b171",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/d0cd638f4634c16d8df4508e847f14e9e43168b8",
+                "reference": "d0cd638f4634c16d8df4508e847f14e9e43168b8",
                 "shasum": ""
             },
             "require": {
@@ -1714,7 +1714,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.8-dev"
+                    "dev-master": "1.9-dev"
                 }
             },
             "autoload": {
@@ -1748,7 +1748,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2018-04-26T10:06:28+00:00"
+            "time": "2018-08-06T14:22:27+00:00"
         },
         {
             "name": "symfony/polyfill-php70",
