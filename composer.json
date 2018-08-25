@@ -29,7 +29,7 @@
         "php": ">=7.2",
         "ext-curl": "*",
         "ext-json": "*",
-        "desu-project/chanbooru-interface": "^0.6.1"
+        "desu-project/chanbooru-interface": "^0.7.2"
     },
     "autoload": {
         "psr-4": {

@@ -4,29 +4,39 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2a325d68f08d1cc04f74349e15ce1e86",
+    "content-hash": "22e61aefdddbcecc2d76770bcd1bc547",
     "packages": [
         {
             "name": "desu-project/chanbooru-interface",
-            "version": "v0.6.1",
+            "version": "v0.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/desu-project/chanbooru-interface.git",
-                "reference": "32bbc9ec3418e296b93bc8ac40bd75b8745c4983"
+                "reference": "7f6331f5605d362007fa356c438e2b36a6f82c68"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/desu-project/chanbooru-interface/zipball/32bbc9ec3418e296b93bc8ac40bd75b8745c4983",
-                "reference": "32bbc9ec3418e296b93bc8ac40bd75b8745c4983",
+                "url": "https://api.github.com/repos/desu-project/chanbooru-interface/zipball/7f6331f5605d362007fa356c438e2b36a6f82c68",
+                "reference": "7f6331f5605d362007fa356c438e2b36a6f82c68",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.11"
+                "friendsofphp/php-cs-fixer": "^2.12",
+                "phpstan/phpstan": "^0.10.2",
+                "slevomat/coding-standard": "^4.6",
+                "squizlabs/php_codesniffer": "^3.3"
             },
             "type": "library",
+            "extra": {
+                "violinist": {
+                    "blacklist": [],
+                    "allow_updates_beyond_constraint": 1,
+                    "update_with_dependencies": 1
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "DesuProject\\ChanbooruInterface\\": "src/"
@@ -49,7 +59,7 @@
                 "interface",
                 "standard"
             ],
-            "time": "2018-08-04T21:01:37+00:00"
+            "time": "2018-08-25T16:58:41+00:00"
         }
     ],
     "packages-dev": [

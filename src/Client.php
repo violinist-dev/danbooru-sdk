@@ -3,6 +3,11 @@
 namespace DesuProject\DanbooruSdk;
 
 use DesuProject\ChanbooruInterface\ClientInterface;
+use DesuProject\ChanbooruInterface\Exception\PostNotFoundException;
+use DesuProject\ChanbooruInterface\Exception\TagNotFoundException;
+use DesuProject\ChanbooruInterface\PostInterface;
+use DesuProject\ChanbooruInterface\TagInterface;
+use InvalidArgumentException;
 use RuntimeException;
 
 class Client implements ClientInterface
@@ -113,6 +118,101 @@ class Client implements ClientInterface
         curl_close($curl);
 
         return json_decode($response, true);
+    }
+
+    /**
+     * Search posts.
+     *
+     * @param string[] $tags
+     * @param int      $page
+     * @param int      $limit
+     *
+     * @return Post[]
+     */
+    public function searchPosts(
+        array $tags,
+        int $page,
+        int $limit = 20
+    ): array {
+        return Post::search($this, $tags, $page, $limit);
+    }
+
+    /**
+     * Get certain post by its ID or throw exception if nothing found.
+     *
+     * @param int $id
+     *
+     * @return Post
+     *
+     * @throws PostNotFoundException if post not found
+     */
+    public function getPostById(
+        int $id
+    ): PostInterface {
+        return Post::byId($this, $id);
+    }
+
+    /**
+     * @param array|null|string $names   If it's string, it will search by pattern.
+     *                                   If it's array, it will search strictly by tag names.
+     * @param string $orderBy
+     * @param bool   $hideEmpty
+     *
+     * @return Tag[]
+     *
+     * @throws InvalidArgumentException if invalid $names argument passed
+     */
+    public function searchTags(
+        $names,
+        string $orderBy,
+        bool $hideEmpty = true
+    ): array {
+        return Tag::search($this, $names, $orderBy, $hideEmpty);
+    }
+
+    /**
+     * Search tags by names.
+     *
+     * @param string[] $names
+     * @param string   $orderBy
+     *
+     * @return Tag[]
+     */
+    public function searchTagsByNames(
+        array $names,
+        string $orderBy
+    ): array {
+        return Tag::byNames($this, $names, $orderBy);
+    }
+
+    /**
+     * Search tags by pattern.
+     *
+     * @param string $namePattern @example: girl*
+     * @param string $orderBy
+     *
+     * @return Tag[]
+     */
+    public function searchTagsByNamePattern(
+        string $namePattern,
+        string $orderBy
+    ): array {
+        return Tag::byNamePattern($this, $namePattern, $orderBy);
+    }
+
+    /**
+     * Search tag by name or throw exception if nothing found.
+     *
+     * @param string $name
+     *
+     * @return Tag
+     *
+     * @throws TagNotFoundException if tag not found
+     */
+    public function searchTagByName(
+        string $name
+    ): TagInterface {
+        return Tag::byName($this, $name);
     }
 
     private function convertArrayToCurlHeaders(array $headers): array
