@@ -122,7 +122,7 @@ class Post implements PostInterface
         }
 
         if (!self::isValidSource($source)) {
-            throw new InvalidArgumentException('Source is invalid');
+            $this->source = null;
         }
 
         foreach ($tags as $tag) {
@@ -341,7 +341,7 @@ class Post implements PostInterface
             self::getStatusByBooleanFlags($post['is_pending'], $post['is_deleted'], $post['is_banned']),
             $post['preview_file_url'] ?? null,
             $originalFile,
-            $post['source'] !== '' ? $post['source'] : null,
+            $post['source'],
             $tags
         );
     }
