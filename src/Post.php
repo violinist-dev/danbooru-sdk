@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DesuProject\DanbooruSdk;
 
-use DateTime;
 use DesuProject\ChanbooruInterface\Exception\PostNotFoundException;
 use DesuProject\ChanbooruInterface\FileInterface;
 use DesuProject\ChanbooruInterface\PostInterface;
@@ -10,15 +11,10 @@ use InvalidArgumentException;
 
 class Post implements PostInterface
 {
-    const ENDPOINT = '/posts.json';
+    public const ENDPOINT = '/posts.json';
 
     /**
-     * @var int
-     */
-    private $id;
-
-    /**
-     * @var DateTime
+     * @var \DateTimeImmutable
      */
     private $creationDate;
 
@@ -26,6 +22,16 @@ class Post implements PostInterface
      * @var null|string
      */
     private $hash;
+
+    /**
+     * @var int
+     */
+    private $id;
+
+    /**
+     * @var null|string
+     */
+    private $previewImageUrl;
 
     /**
      * @var int
@@ -38,14 +44,9 @@ class Post implements PostInterface
     private $score;
 
     /**
-     * @var int
-     */
-    private $status;
-
-    /**
      * @var null|string
      */
-    private $previewImageUrl;
+    private $source;
 
     /**
      * @var null|File
@@ -53,9 +54,9 @@ class Post implements PostInterface
     private $sourceFile;
 
     /**
-     * @var null|string
+     * @var int
      */
-    private $source;
+    private $status;
 
     /**
      * @var Tag[]
@@ -65,22 +66,22 @@ class Post implements PostInterface
     /**
      * Post constructor.
      *
-     * @param int         $id
-     * @param DateTime    $creationDate
-     * @param null|string $hash
-     * @param int         $rating
-     * @param int         $score
-     * @param int         $status
-     * @param null|string $previewImageUrl
-     * @param null|File   $sourceFile
-     * @param string|null $source
-     * @param Tag[]       $tags
+     * @param int                $id
+     * @param \DateTimeImmutable $creationDate
+     * @param null|string        $hash
+     * @param int                $rating
+     * @param int                $score
+     * @param int                $status
+     * @param null|string        $previewImageUrl
+     * @param null|File          $sourceFile
+     * @param string|null        $source
+     * @param Tag[]              $tags
      *
      * @throws InvalidArgumentException if invalid argument passed
      */
     public function __construct(
         int $id,
-        DateTime $creationDate,
+        \DateTimeImmutable $creationDate,
         ?string $hash,
         int $rating,
         int $score,
@@ -133,6 +134,32 @@ class Post implements PostInterface
     }
 
     /**
+     * Get certain post by its ID or throw exception if nothing found.
+     *
+     * @param Client $client
+     * @param int    $id
+     *
+     * @throws PostNotFoundException if post not found
+     *
+     * @return Post
+     */
+    public static function byId(
+        Client $client,
+        int $id
+    ): self {
+        $posts = self::search($client, ['id:' . $id], 1, 1);
+
+        if (count($posts) === 0) {
+            throw new PostNotFoundException(sprintf(
+                'Post with ID %d not found',
+                $id
+            ));
+        }
+
+        return $posts[0];
+    }
+
+    /**
      * Search posts.
      *
      * @param Client   $client
@@ -167,35 +194,29 @@ class Post implements PostInterface
             $query
         );
 
-        return array_map(function (array $post) use ($client): Post {
+        return array_map(function (array $post) use ($client): self {
             return self::fromArray($client, $post);
         }, $postsAsArrays);
     }
 
     /**
-     * Get certain post by its ID or throw exception if nothing found.
+     * {@inheritdoc}
      *
-     * @param Client $client
-     * @param int    $id
-     *
-     * @return Post
-     *
-     * @throws PostNotFoundException if post not found
+     * @return \DateTimeImmutable
      */
-    public static function byId(
-        Client $client,
-        int $id
-    ): Post {
-        $posts = self::search($client, ['id:' . $id], 1, 1);
+    public function getCreationDate(): \DateTimeImmutable
+    {
+        return $this->creationDate;
+    }
 
-        if (count($posts) === 0) {
-            throw new PostNotFoundException(sprintf(
-                'Post with ID %d not found',
-                $id
-            ));
-        }
-
-        return $posts[0];
+    /**
+     * {@inheritdoc}
+     *
+     * @return null|string
+     */
+    public function getHash(): ?string
+    {
+        return $this->hash;
     }
 
     /**
@@ -211,21 +232,11 @@ class Post implements PostInterface
     /**
      * {@inheritdoc}
      *
-     * @return DateTime
-     */
-    public function getCreationDate(): DateTime
-    {
-        return $this->creationDate;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
      * @return null|string
      */
-    public function getHash(): ?string
+    public function getPreviewImageUrl(): ?string
     {
-        return $this->hash;
+        return $this->previewImageUrl;
     }
 
     /**
@@ -251,11 +262,11 @@ class Post implements PostInterface
     /**
      * {@inheritdoc}
      *
-     * @return int
+     * @return null|string
      */
-    public function getStatus(): int
+    public function getSource(): ?string
     {
-        return $this->status;
+        return $this->source;
     }
 
     /**
@@ -271,11 +282,11 @@ class Post implements PostInterface
     /**
      * {@inheritdoc}
      *
-     * @return null|string
+     * @return int
      */
-    public function getPreviewImageUrl(): ?string
+    public function getStatus(): int
     {
-        return $this->previewImageUrl;
+        return $this->status;
     }
 
     /**
@@ -287,21 +298,11 @@ class Post implements PostInterface
     {
         if ($type === null) {
             return $this->tags;
-        } else {
-            return array_filter($this->tags, function (Tag $tag) use ($type): bool {
-                return $tag->getType() === $type;
-            });
         }
-    }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return null|string
-     */
-    public function getSource(): ?string
-    {
-        return $this->source;
+        return array_filter($this->tags, function (Tag $tag) use ($type): bool {
+            return $tag->getType() === $type;
+        });
     }
 
     /**
@@ -311,7 +312,7 @@ class Post implements PostInterface
      */
     public function isPostCensored(): bool
     {
-        return is_null($this->getHash());
+        return $this->getHash() === null;
     }
 
     /**
@@ -325,16 +326,16 @@ class Post implements PostInterface
     protected static function fromArray(
         Client $client,
         array $post
-    ): Post {
+    ): self {
         $originalFile = isset($post['file_ext'])
             ? File::fromArray($post)
             : null;
 
         $tags = Tag::byNames($client, explode(' ', $post['tag_string']));
 
-        return new Post(
+        return new self(
             $post['id'],
-            DateTime::createFromFormat('Y-m-d\TH:i:s.uP', $post['created_at']),
+            \DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.uP', $post['created_at']),
             $post['md5'] ?? null,
             self::getRatingByStringIdentifier($post['rating']),
             $post['score'],
@@ -399,14 +400,13 @@ class Post implements PostInterface
         return PostInterface::STATUS_PUBLISHED;
     }
 
-    protected static function isValidPageNumber(int $page): bool
+    protected static function isValidHash(?string $hash): bool
     {
-        return $page > 0;
-    }
+        if ($hash === null) {
+            return true;
+        }
 
-    protected static function isValidLimitation(int $limit): bool
-    {
-        return $limit > 0;
+        return preg_match('/^[a-f0-9]{32}$/', $hash) === 1;
     }
 
     protected static function isValidId(int $id): bool
@@ -414,36 +414,19 @@ class Post implements PostInterface
         return $id > 0;
     }
 
-    protected static function isValidHash(?string $hash): bool
+    protected static function isValidLimitation(int $limit): bool
     {
-        if (is_null($hash)) {
-            return true;
-        }
-
-        return preg_match('/^[a-f0-9]{32}$/', $hash) === 1;
+        return $limit > 0;
     }
 
-    protected static function isValidRating(int $rating): bool
+    protected static function isValidPageNumber(int $page): bool
     {
-        return in_array($rating, [
-            self::RATING_SAFE,
-            self::RATING_QUESTIONABLE,
-            self::RATING_EXPLICIT,
-        ]);
-    }
-
-    protected static function isValidStatus(int $status): bool
-    {
-        return in_array($status, [
-            self::STATUS_PUBLISHED,
-            self::STATUS_PENDING_MODERATION,
-            self::STATUS_DELETED,
-        ]);
+        return $page > 0;
     }
 
     protected static function isValidPreviewImageUrl(?string $previewFileUrl): bool
     {
-        if (is_null($previewFileUrl)) {
+        if ($previewFileUrl === null) {
             return true;
         }
 
@@ -454,9 +437,18 @@ class Post implements PostInterface
         );
     }
 
+    protected static function isValidRating(int $rating): bool
+    {
+        return in_array($rating, [
+            self::RATING_SAFE,
+            self::RATING_QUESTIONABLE,
+            self::RATING_EXPLICIT,
+        ], true);
+    }
+
     protected static function isValidSource(?string $source): bool
     {
-        if (is_null($source)) {
+        if ($source === null) {
             return true;
         }
 
@@ -465,5 +457,14 @@ class Post implements PostInterface
             FILTER_VALIDATE_URL,
             FILTER_FLAG_SCHEME_REQUIRED | FILTER_FLAG_HOST_REQUIRED | FILTER_FLAG_PATH_REQUIRED
         );
+    }
+
+    protected static function isValidStatus(int $status): bool
+    {
+        return in_array($status, [
+            self::STATUS_PUBLISHED,
+            self::STATUS_PENDING_MODERATION,
+            self::STATUS_DELETED,
+        ], true);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DesuProject\DanbooruSdk;
 
 use DesuProject\ChanbooruInterface\FileInterface;
@@ -10,7 +12,17 @@ class File implements FileInterface
     /**
      * @var int
      */
+    private $height;
+
+    /**
+     * @var int
+     */
     private $size;
+
+    /**
+     * @var int
+     */
+    private $type;
 
     /**
      * @var string
@@ -20,17 +32,7 @@ class File implements FileInterface
     /**
      * @var int
      */
-    private $type;
-
-    /**
-     * @var int
-     */
     private $width;
-
-    /**
-     * @var int
-     */
-    private $height;
 
     /**
      * File constructor.
@@ -84,13 +86,13 @@ class File implements FileInterface
      *
      * @return File
      */
-    public static function fromArray(array $file): File
+    public static function fromArray(array $file): self
     {
         $url = $file['file_ext'] === 'zip'
             ? $file['large_file_url']
             : $file['file_url'];
 
-        return new File(
+        return new self(
             $file['file_size'],
             $url,
             self::getFileTypeByExtension($file['file_ext']),
@@ -104,9 +106,29 @@ class File implements FileInterface
      *
      * @return int
      */
+    public function getHeight(): int
+    {
+        return $this->height;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return int
+     */
     public function getSize(): int
     {
         return $this->size;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return int
+     */
+    public function getType(): int
+    {
+        return $this->type;
     }
 
     /**
@@ -124,29 +146,9 @@ class File implements FileInterface
      *
      * @return int
      */
-    public function getType(): int
-    {
-        return $this->type;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return int
-     */
     public function getWidth(): int
     {
         return $this->width;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return int
-     */
-    public function getHeight(): int
-    {
-        return $this->height;
     }
 
     /**
@@ -177,9 +179,22 @@ class File implements FileInterface
         }
     }
 
+    protected static function isHeightValid(int $height): bool
+    {
+        return $height > 0;
+    }
+
     protected static function isSizeValid(int $size): bool
     {
         return $size > 0;
+    }
+
+    protected static function isTypeValid(int $type): bool
+    {
+        return in_array($type, [
+            self::TYPE_IMAGE,
+            self::TYPE_VIDEO,
+        ], true);
     }
 
     protected static function isUrlValid(string $url): bool
@@ -191,21 +206,8 @@ class File implements FileInterface
         );
     }
 
-    protected static function isTypeValid(int $type): bool
-    {
-        return in_array($type, [
-            self::TYPE_IMAGE,
-            self::TYPE_VIDEO,
-        ]);
-    }
-
     protected static function isWidthValid(int $width): bool
     {
         return $width > 0;
-    }
-
-    protected static function isHeightValid(int $height): bool
-    {
-        return $height > 0;
     }
 }

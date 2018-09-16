@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DesuProject\DanbooruSdk;
 
 use DesuProject\ChanbooruInterface\Exception\TagNotFoundException;
@@ -8,27 +10,28 @@ use InvalidArgumentException;
 
 class Tag implements TagInterface
 {
-    const ENDPOINT = '/tags.json';
+    public const DANBOORU_TYPE_ARTIST = 1;
+    public const DANBOORU_TYPE_CHARACTER = 4;
 
-    const ORDER_NAME = 'name';
-    const ORDER_DATE = 'date';
-    const ORDER_COUNT = 'count';
+    public const DANBOORU_TYPE_GENERAL = 0;
+    public const DANBOORU_TYPE_META = 5;
+    public const DANBOORU_TYPE_TITLE = 3;
 
-    const DANBOORU_TYPE_GENERAL = 0;
-    const DANBOORU_TYPE_ARTIST = 1;
-    const DANBOORU_TYPE_CHARACTER = 4;
-    const DANBOORU_TYPE_TITLE = 3;
-    const DANBOORU_TYPE_META = 5;
+    public const ENDPOINT = '/tags.json';
 
-    /**
-     * @var string
-     */
-    private $title;
+    public const ORDER_COUNT = 'count';
+    public const ORDER_DATE = 'date';
+    public const ORDER_NAME = 'name';
 
     /**
      * @var int
      */
     private $amountOfPosts;
+
+    /**
+     * @var string
+     */
+    private $title;
 
     /**
      * @var null|int
@@ -59,81 +62,35 @@ class Tag implements TagInterface
     }
 
     /**
-     * @param Client               $client
-     * @param string[]|null|string $names  If it's string, it will search by pattern.
-     *                                     If it's array, it will search strictly by tag names.
-     * @param string            $orderBy
-     * @param bool              $hideEmpty
+     * Search tag by name or throw exception if nothing found.
      *
-     * @return Tag[]
+     * @param Client $client
+     * @param string $name
      *
-     * @throws InvalidArgumentException if invalid $names argument passed
+     * @throws TagNotFoundException if tag not found
+     *
+     * @return Tag
      */
-    public static function search(
+    public static function byName(
         Client $client,
-        $names,
-        string $orderBy = self::ORDER_NAME,
-        //        ?int $type = null,
-        bool $hideEmpty = true
-    ): array {
-        if (!is_null($names) && !is_string($names) && !is_array($names)) {
-            throw new InvalidArgumentException('$names may be only null, string or array');
-        }
-
-        if (!self::isValidOrderingMethod($orderBy)) {
-            throw new InvalidArgumentException('Invalid order method');
-        }
-
-//        if (!is_null($type) && !self::isValidType($type)) {
-//            throw new InvalidArgumentException('Invalid tag type');
-//        }
-
-        $query = [
-            'search' => [
-                'order' => $orderBy,
-                'hide_empty' => $hideEmpty === true ? 'yes' : 'no',
-            ],
-        ];
-
-        if (!is_null($names)) {
-            if (is_string($names)) {
-                $query['search']['name_matches'] = $names;
-            }
-
-            if (is_array($names)) {
-                $query['search']['name'] = implode(',', $names);
-            }
-        }
-
-//        if (!is_null($type)) {
-//            $query['search']['category'] = $type;
-//        }
-
-        $tagsAsArrays = $client->sendRequest(
-            self::ENDPOINT,
-            $query
+        string $name
+    ): self {
+        $tags = self::search(
+            $client,
+            [$name],
+            self::ORDER_NAME,
+            //            null,
+            false
         );
 
-        return array_map(function (array $tag): Tag {
-            return self::fromArray($tag);
-        }, $tagsAsArrays);
-    }
+        if (count($tags) === 0) {
+            throw new TagNotFoundException(sprintf(
+                'Tag with name %s not found',
+                $name
+            ));
+        }
 
-    /**
-     * Search tags by names.
-     *
-     * @param Client   $client
-     * @param string[] $names
-     * @param string   $orderBy
-     *
-     * @return Tag[]
-     */
-    public static function byNames(
-        Client $client,
-        array $names,
-        string $orderBy = self::ORDER_NAME
-    ): array {
-        return self::search($client, $names, $orderBy);
+        return $tags[0];
     }
 
     /**
@@ -154,45 +111,81 @@ class Tag implements TagInterface
     }
 
     /**
-     * Search tag by name or throw exception if nothing found.
+     * Search tags by names.
      *
-     * @param Client $client
-     * @param string $name
+     * @param Client   $client
+     * @param string[] $names
+     * @param string   $orderBy
      *
-     * @return Tag
-     *
-     * @throws TagNotFoundException if tag not found
+     * @return Tag[]
      */
-    public static function byName(
+    public static function byNames(
         Client $client,
-        string $name
-    ): Tag {
-        $tags = self::search(
-            $client,
-            [$name],
-            self::ORDER_NAME,
-            //            null,
-            false
-        );
-
-        if (count($tags) === 0) {
-            throw new TagNotFoundException(sprintf(
-                'Tag with name %s not found',
-                $name
-            ));
-        }
-
-        return $tags[0];
+        array $names,
+        string $orderBy = self::ORDER_NAME
+    ): array {
+        return self::search($client, $names, $orderBy);
     }
 
     /**
-     * {@inheritdoc}
+     * @param Client               $client
+     * @param string[]|null|string $names     if it's string, it will search by pattern.
+     *                                        If it's array, it will search strictly by tag names
+     * @param string               $orderBy
+     * @param bool                 $hideEmpty
      *
-     * @return string
+     * @throws InvalidArgumentException if invalid $names argument passed
+     *
+     * @return Tag[]
      */
-    public function getTitle(): string
-    {
-        return $this->title;
+    public static function search(
+        Client $client,
+        $names,
+        string $orderBy = self::ORDER_NAME,
+        //        ?int $type = null,
+        bool $hideEmpty = true
+    ): array {
+        if ($names !== null && !is_string($names) && !is_array($names)) {
+            throw new InvalidArgumentException('$names may be only null, string or array');
+        }
+
+        if (!self::isValidOrderingMethod($orderBy)) {
+            throw new InvalidArgumentException('Invalid order method');
+        }
+
+//        if (!is_null($type) && !self::isValidType($type)) {
+//            throw new InvalidArgumentException('Invalid tag type');
+//        }
+
+        $query = [
+            'search' => [
+                'order' => $orderBy,
+                'hide_empty' => $hideEmpty === true ? 'yes' : 'no',
+            ],
+        ];
+
+        if ($names !== null) {
+            if (is_string($names)) {
+                $query['search']['name_matches'] = $names;
+            }
+
+            if (is_array($names)) {
+                $query['search']['name'] = implode(',', $names);
+            }
+        }
+
+//        if (!is_null($type)) {
+//            $query['search']['category'] = $type;
+//        }
+
+        $tagsAsArrays = $client->sendRequest(
+            self::ENDPOINT,
+            $query
+        );
+
+        return array_map(function (array $tag): self {
+            return self::fromArray($tag);
+        }, $tagsAsArrays);
     }
 
     /**
@@ -208,37 +201,21 @@ class Tag implements TagInterface
     /**
      * {@inheritdoc}
      *
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
      * @return null|int
      */
     public function getType(): ?int
     {
         return $this->type;
-    }
-
-    /**
-     * Creates Tag instance from API response.
-     *
-     * @param array $tag
-     *
-     * @return Tag
-     */
-    protected static function fromArray(array $tag): Tag
-    {
-        return new Tag($tag['name'], $tag['post_count'], $tag['category']);
-    }
-
-    protected static function isValidAmountOfPosts(int $amountOfPosts): bool
-    {
-        return $amountOfPosts >= 0;
-    }
-
-    protected static function isValidOrderingMethod(string $orderBy): bool
-    {
-        return in_array($orderBy, [
-            self::ORDER_NAME,
-            self::ORDER_DATE,
-            self::ORDER_COUNT,
-        ]);
     }
 
     protected static function convertDanbooruTypeToChanbooruType(int $type): ?int
@@ -256,5 +233,31 @@ class Tag implements TagInterface
         }
 
         return $types[$type];
+    }
+
+    /**
+     * Creates Tag instance from API response.
+     *
+     * @param array $tag
+     *
+     * @return Tag
+     */
+    protected static function fromArray(array $tag): self
+    {
+        return new self($tag['name'], $tag['post_count'], $tag['category']);
+    }
+
+    protected static function isValidAmountOfPosts(int $amountOfPosts): bool
+    {
+        return $amountOfPosts >= 0;
+    }
+
+    protected static function isValidOrderingMethod(string $orderBy): bool
+    {
+        return in_array($orderBy, [
+            self::ORDER_NAME,
+            self::ORDER_DATE,
+            self::ORDER_COUNT,
+        ], true);
     }
 }
